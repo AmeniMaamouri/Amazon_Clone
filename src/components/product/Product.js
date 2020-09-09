@@ -8,7 +8,7 @@ const Product = ({ id, title, price, image, rating }) => {
 
     const handleClick = () => {
         dispatch({type: 'ADD_BASKET', product: {
-            title,price,image,rating
+            id,title,price,image,rating
         } })
     }
 

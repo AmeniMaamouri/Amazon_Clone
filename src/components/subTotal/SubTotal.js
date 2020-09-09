@@ -8,10 +8,11 @@ const SubTotal = ({ basketItems }) => {
     let [totalPrice, setTotalPrice] = useState(0)
     
    useEffect(()=> {
+    setTotalPrice(0)
     basketItems.map(item => {
          setTotalPrice(prev => prev + item.price)
     })
-   },[])
+   },[basketItems])
 
 
     return (
