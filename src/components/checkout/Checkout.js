@@ -1,6 +1,12 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import './checkout.css' 
+import SubTotal from '../subTotal/SubTotal'
+import { BasketContext } from '../../contexts/BasketContext'
+
+
 const Checkout = () => {
+    const {basketItems} = useContext(BasketContext)
+
     return (
         <div className="checkout">
             <div className="checkout__left">
@@ -9,10 +15,10 @@ const Checkout = () => {
                 <div>
                     <h2 className="checkout__title">Your shopping Basket</h2>
                 </div>
-                <div className="checkout__right">
-                       
-                </div>
             </div>
+            <div className="checkout__right">
+                       <SubTotal basketItems={basketItems} />
+                </div>
         </div>
     );
 }
