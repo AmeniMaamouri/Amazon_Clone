@@ -1,6 +1,8 @@
 import React, { useContext } from 'react'
 import { BasketContext } from '../../contexts/BasketContext';
 import './checkoutProduct.css'
+import FlipMove from 'react-flip-move'
+
 const CheckoutProduct = ({ item }) => {
 
     const { dispatch } = useContext(BasketContext)
@@ -9,6 +11,7 @@ const CheckoutProduct = ({ item }) => {
         dispatch({ type: 'REMOVE_BASKET', id: item.id })
     }
     return (
+        <FlipMove leaveAnimation="elevator">
         <div className="checkoutProduct" key={item.id}>
             <img className="checkoutProduct__image" src={item.image} alt="" />
             <div className="checkoutProduct__info">
@@ -24,6 +27,7 @@ const CheckoutProduct = ({ item }) => {
                 </div>
                 <button onClick={handleClick}>Remove from basket</button></div>
         </div>
+        </FlipMove>
     );
 }
 

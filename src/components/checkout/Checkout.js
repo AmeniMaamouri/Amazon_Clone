@@ -3,7 +3,7 @@ import './checkout.css'
 import SubTotal from '../subTotal/SubTotal'
 import { BasketContext } from '../../contexts/BasketContext'
 import CheckoutProduct from '../checkoutProduct/CheckoutProduct'
-
+import FlipMove from 'react-flip-move'
 
 const Checkout = () => {
     const { basketItems } = useContext(BasketContext)
@@ -19,9 +19,12 @@ const Checkout = () => {
                     {basketItems != '' ? (
                         <div>
                             <h2 className="checkout__title">Your shopping Basket</h2>
+                            
+                          
                             {basketItems.map(item => {
                                 return <CheckoutProduct item={item}  />
                             })}
+                           
                         </div>
                     ) : (<div>
                         <h2>Your Shopping Basket is empty</h2>
