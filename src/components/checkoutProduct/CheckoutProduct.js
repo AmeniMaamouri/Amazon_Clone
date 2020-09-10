@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { BasketContext } from '../../contexts/BasketContext';
-
+import './checkoutProduct.css'
 const CheckoutProduct = ({ item }) => {
 
     const { dispatch } = useContext(BasketContext)
