@@ -7,6 +7,7 @@ import FlipMove from 'react-flip-move'
 
 const Checkout = () => {
     const { basketItems } = useContext(BasketContext)
+  
 
     return (
         <div className="checkout">

@@ -12,6 +12,11 @@ import BasketContextProvider from './contexts/BasketContext';
 import SignIn from './components/auth/signIn/SignIn';
 import { AuthContext } from './contexts/AuthContext';
 import { auth } from './config'
+import Payment from './components/payment/Payment';
+import {loadStripe} from '@stripe/stripe-js'
+import {Elements} from '@stripe/react-stripe-js'
+
+const promise = loadStripe('pk_test_51HPvTbJqRTn8ArZfFqNnmDfYrwjQQIZV6isUruxEIQ0Aj1HFp3hIr3uezG1hUC4cMz7NRT938scNERFEVIIuCQoj00fgrpwaG3');
 
 const App = () => {
 
@@ -27,7 +32,7 @@ const App = () => {
       }
       setLoading(false)
     })
-  }, [dispatch])
+  }, [])
 
   return (
     <div className="app">
@@ -35,6 +40,14 @@ const App = () => {
         <Switch>
           <Route path="/signin">
             <SignIn />
+          </Route>
+          <Route path="/payment">
+          <BasketContextProvider>
+          <Header />
+          <Elements stripe={promise}>
+          <Payment />
+          </Elements>
+          </BasketContextProvider>
           </Route>
           <Route path="/checkout">
             <BasketContextProvider>

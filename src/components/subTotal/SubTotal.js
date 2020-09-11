@@ -1,22 +1,31 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import './subTotal.css'
 
 import CurrencyFormat from 'react-currency-format';
+import { useHistory } from 'react-router-dom';
 
 const SubTotal = ({ basketItems }) => {
 
     let [totalPrice, setTotalPrice] = useState(0)
-    
+    const [loading, setLoading] = useState(true)
+    const history = useHistory()
+
    useEffect(()=> {
     setTotalPrice(0)
     basketItems.map(item => {
-         setTotalPrice(prev => prev + item.price)
+         setTotalPrice(prev => prev + item.price*item.amount)
     })
+    setLoading(false)
    },[basketItems])
+
+   const handleClick = () =>  {
+    history.push('/payment')
+   }
 
 
     return (
-        <div className="subtotal">
+        <div>
+            {loading === false ? <div className="subtotal">
             <CurrencyFormat
                 renderText={(value) => (
                     <>
@@ -35,7 +44,8 @@ const SubTotal = ({ basketItems }) => {
                 prefix={"$"}
             />
 
-            <button>Proceed to Checkout</button>
+            <button onClick={handleClick}>Proceed to Checkout</button>
+        </div> : null}
         </div>
     );
 }
