@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useLayoutEffect, useState } from 'react'
 import CheckoutProduct from '../checkoutProduct/CheckoutProduct'
 import { BasketContext } from '../../contexts/BasketContext';
 import { Link } from 'react-router-dom';
@@ -6,43 +6,32 @@ import './payment.css'
 import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
 import CurrencyFormat from 'react-currency-format';
 import axios from 'axios'
-import {useHistory} from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
+import { getBasketTotal } from '../../reducers/basketReducer';
 const Payment = () => {
 
-    const { basketItems } = useContext(BasketContext)
+    const { basketItems, dispatch } = useContext(BasketContext)
     const [error, setError] = useState(null)
     const [disabled, setDisabled] = useState(true)
-    let [totalPrice, setTotalPrice] = useState(0)
-    const [loading, setLoading] = useState(true)
+
     const [clientSecret, setClientSecret] = useState(true)
-    const [processing, setProcessing] = useState(true)
-    const [succeeded, setSucceeded] = useState(true)
+    const [processing, setProcessing] = useState('')
+    const [succeeded, setSucceeded] = useState(false)
     const stripe = useStripe()
     const history = useHistory()
     const elements = useElements()
+    
 
-   
+        useEffect(()=> {
+            axios.post(`http://localhost:5001/clone-67d06/us-central1/api/payments/create?total=${getBasketTotal(basketItems)*100}`)
+            .then(res => {
+                console.log(res)
+              setClientSecret(res.data.clientSecret)
+            }).catch(err => console.log(err))
+        },[basketItems])
+    
 
-    useEffect(() => {
-        setTotalPrice(0)
-        basketItems.map(item => {
-            setTotalPrice(prev => prev + item.price * item.amount)
-        })
-        setLoading(false)
-    }, [basketItems])
-
-    useEffect(() => {
-       const getClientSecret = async () => {
-         axios.post(`/payments/create?total=${totalPrice*100}`)
-       .then(res => {
-           console.log(res)
-         setClientSecret(res.data.clientSecret)
-       }).catch(err => console.log(err))
-    }
-
-    if(loading === false ) getClientSecret()
-       
-    }, [basketItems])
+    console.log('secret', clientSecret)
 
 
     const handleSubmit = async (e) => {
@@ -50,17 +39,19 @@ const Payment = () => {
         setProcessing(true)
 
         const payload = await stripe.confirmCardPayment(clientSecret, {
-            payment_method : {
+            payment_method: {
                 card: elements.getElement(CardElement)
             }
-        }).then(({paymentIntent}) => {
+        }).then(({ paymentIntent }) => {
             setSucceeded(true)
             setError(null)
             setProcessing(false)
+            
             history.replace('/orders')
+            dispatch({type:'EMPTY_BASKET'})
         })
     }
- 
+
 
     const handleChange = (e) => {
         setDisabled(e.empty)
@@ -87,7 +78,7 @@ const Payment = () => {
                         <h3>Review items and delivery</h3>
                     </div>
                     <div className="payment__items">
-                        {basketItems.map(item => {
+                        {basketItems && basketItems.map(item => {
                             return <CheckoutProduct item={item} />
                         })}
 
@@ -106,17 +97,17 @@ const Payment = () => {
                             <div class="payment__priceContainer">
                                 <CurrencyFormat
                                     renderText={(value) => (
-                                    <h3>Order Total: {value}</h3>
+                                        <h3>Order Total: {value}</h3>
                                     )}
                                     decimalScale={2}
-                                    value={totalPrice}
+                                    value={getBasketTotal(basketItems)}
                                     displayType={"text"}
                                     thousandSeparator={true}
                                     prefix={"$"}
                                 />
-                                <button disabled={processing || disabled || succeeded}>
-                                    <span>{processing ? <p>Proccesing </p> : "Buy Now"}</span>
-                                </button>
+                               <button disabled={processing || disabled || succeeded}>
+                                        <span>{processing ? <p>Processing</p> : "Buy Now"}</span>
+                                    </button>
                             </div>
                         </form>
                     </div>

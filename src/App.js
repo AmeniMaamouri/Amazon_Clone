@@ -16,6 +16,7 @@ import Payment from './components/payment/Payment';
 import {loadStripe} from '@stripe/stripe-js'
 import {Elements} from '@stripe/react-stripe-js'
 
+
 const promise = loadStripe('pk_test_51HPvTbJqRTn8ArZfFqNnmDfYrwjQQIZV6isUruxEIQ0Aj1HFp3hIr3uezG1hUC4cMz7NRT938scNERFEVIIuCQoj00fgrpwaG3');
 
 const App = () => {
@@ -45,14 +46,18 @@ const App = () => {
           <BasketContextProvider>
           <Header />
           <Elements stripe={promise}>
+          
           <Payment />
+          
           </Elements>
           </BasketContextProvider>
           </Route>
           <Route path="/checkout">
             <BasketContextProvider>
+            
               <Header />
               <Checkout />
+            
             </BasketContextProvider>
           </Route>
           <Route path="/">

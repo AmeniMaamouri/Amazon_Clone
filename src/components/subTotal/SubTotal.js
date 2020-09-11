@@ -1,31 +1,15 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import './subTotal.css'
 
 import CurrencyFormat from 'react-currency-format';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import { getBasketTotal } from '../../reducers/basketReducer';
 
 const SubTotal = ({ basketItems }) => {
 
-    let [totalPrice, setTotalPrice] = useState(0)
-    const [loading, setLoading] = useState(true)
-    const history = useHistory()
-
-   useEffect(()=> {
-    setTotalPrice(0)
-    basketItems.map(item => {
-         setTotalPrice(prev => prev + item.price*item.amount)
-    })
-    setLoading(false)
-   },[basketItems])
-
-   const handleClick = () =>  {
-    history.push('/payment')
-   }
-
-
     return (
-        <div>
-            {loading === false ? <div className="subtotal">
+      
+            <div className="subtotal">
             <CurrencyFormat
                 renderText={(value) => (
                     <>
@@ -38,15 +22,15 @@ const SubTotal = ({ basketItems }) => {
                     </>
                 )}
                 decimalScale={2}
-                value={totalPrice}
+                value={getBasketTotal(basketItems)}
                 displayType={"text"}
                 thousandSeparator={true}
                 prefix={"$"}
             />
 
-            <button onClick={handleClick}>Proceed to Checkout</button>
-        </div> : null}
-        </div>
+            <Link to='/payment'><button className='procced_btn'>Proceed to Checkout</button></Link>
+        </div> 
+     
     );
 }
 

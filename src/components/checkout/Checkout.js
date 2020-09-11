@@ -1,16 +1,25 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import './checkout.css'
 import SubTotal from '../subTotal/SubTotal'
 import { BasketContext } from '../../contexts/BasketContext'
 import CheckoutProduct from '../checkoutProduct/CheckoutProduct'
 import FlipMove from 'react-flip-move'
+import { getBasketTotal } from '../../reducers/basketReducer'
+
 
 const Checkout = () => {
     const { basketItems } = useContext(BasketContext)
-  
+    const [loading, setLoading] = useState(true)
+    const [total , setTotal] = useState(0)
+   
+    useEffect(()=> {
+        console.log(getBasketTotal(basketItems))
+        setLoading(false)
+    },[basketItems])
 
     return (
-        <div className="checkout">
+        <div>
+            {loading === false ? <div className="checkout">
             <div className="checkout__left">
                 <img className="checkout__ad"
                     src="https://images-na.ssl-images-amazon.com/images/G/02/UK_CCMP/TM/OCC_Amazon1._CB423492668_.jpg" />
@@ -22,7 +31,7 @@ const Checkout = () => {
                             <h2 className="checkout__title">Your shopping Basket</h2>
                             
                           
-                            {basketItems.map(item => {
+                            {basketItems && basketItems.map(item => {
                                 return <CheckoutProduct item={item}  />
                             })}
                            
@@ -37,6 +46,7 @@ const Checkout = () => {
             <div className="checkout__right">
                 <SubTotal basketItems={basketItems} />
             </div>
+        </div> : null}
         </div>
     );
 }
