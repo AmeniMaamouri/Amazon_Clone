@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useLayoutEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import CheckoutProduct from '../checkoutProduct/CheckoutProduct'
 import { BasketContext } from '../../contexts/BasketContext';
 import { Link } from 'react-router-dom';
@@ -8,30 +8,31 @@ import CurrencyFormat from 'react-currency-format';
 import axios from 'axios'
 import { useHistory } from 'react-router-dom'
 import { getBasketTotal } from '../../reducers/basketReducer';
+import { db } from '../../config'
+import { AuthContext } from '../../contexts/AuthContext';
 const Payment = () => {
 
     const { basketItems, dispatch } = useContext(BasketContext)
+    const { user } = useContext(AuthContext)
     const [error, setError] = useState(null)
     const [disabled, setDisabled] = useState(true)
-
     const [clientSecret, setClientSecret] = useState(true)
     const [processing, setProcessing] = useState('')
     const [succeeded, setSucceeded] = useState(false)
     const stripe = useStripe()
     const history = useHistory()
     const elements = useElements()
-    
 
-        useEffect(()=> {
-            axios.post(`http://localhost:5001/clone-67d06/us-central1/api/payments/create?total=${getBasketTotal(basketItems)*100}`)
+
+
+    useEffect(() => {
+        axios.post(`http://localhost:5001/clone-67d06/us-central1/api/payments/create?total=${getBasketTotal(basketItems) * 100}`)
             .then(res => {
                 console.log(res)
-              setClientSecret(res.data.clientSecret)
+                setClientSecret(res.data.clientSecret)
             }).catch(err => console.log(err))
-        },[basketItems])
-    
 
-    console.log('secret', clientSecret)
+    }, [basketItems])
 
 
     const handleSubmit = async (e) => {
@@ -43,13 +44,24 @@ const Payment = () => {
                 card: elements.getElement(CardElement)
             }
         }).then(({ paymentIntent }) => {
+            db.collection('users')
+                .doc(user.uid)
+                .collection('orders')
+                .doc(paymentIntent.id)
+                .set({
+                    basket: basketItems,
+                    amount: paymentIntent.amount,
+                    created: paymentIntent.created
+                })
+
             setSucceeded(true)
             setError(null)
             setProcessing(false)
-            
+
             history.replace('/orders')
-            dispatch({type:'EMPTY_BASKET'})
+            dispatch({ type: 'EMPTY_BASKET' })
         })
+
     }
 
 
@@ -79,7 +91,12 @@ const Payment = () => {
                     </div>
                     <div className="payment__items">
                         {basketItems && basketItems.map(item => {
-                            return <CheckoutProduct item={item} />
+                            return <CheckoutProduct id={item.id}
+                                title={item.title}
+                                image={item.image}
+                                price={item.price}
+                                rating={item.rating}
+                                qty={item.qty} />
                         })}
 
                     </div>
@@ -105,9 +122,9 @@ const Payment = () => {
                                     thousandSeparator={true}
                                     prefix={"$"}
                                 />
-                               <button disabled={processing || disabled || succeeded}>
-                                        <span>{processing ? <p>Processing</p> : "Buy Now"}</span>
-                                    </button>
+                                <button disabled={processing || disabled || succeeded}>
+                                    <span>{processing ? <p>Processing</p> : "Buy Now"}</span>
+                                </button>
                             </div>
                         </form>
                     </div>

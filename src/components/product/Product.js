@@ -3,7 +3,7 @@ import './product.css'
 import { BasketContext } from '../../contexts/BasketContext'
 
 
-const Product = ({ id, title, price, image, rating, amount }) => {
+const Product = ({ id, title, price, image, rating, qty }) => {
     const { dispatch } = useContext(BasketContext)
 
     const handleClick = (e) => {
@@ -11,7 +11,7 @@ const Product = ({ id, title, price, image, rating, amount }) => {
 
         dispatch({
             type: 'ADD_BASKET', product: {
-                id, title, price, image, rating, amount
+                id, title, price, image, rating, qty
             }
         })
         

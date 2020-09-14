@@ -3,7 +3,7 @@
 export const getBasketTotal = (basket) => {
   
  
-   return basket.reduce((total, item) => total + (item.price*item.amount), 0)
+   return basket.reduce((total, item) => total + (item.price*item.qty), 0)
 
 }
 
@@ -17,7 +17,7 @@ export const basketReducer = (state, action) => {
          
             const i = basket.findIndex(_item => _item.id === action.product.id);
             if (i > -1) {
-                basket[i].amount++;
+                basket[i].qty++;
                
                 return basket
                 
@@ -33,7 +33,7 @@ export const basketReducer = (state, action) => {
         case 'EDIT_BASKET_AMOUNT':
             let updatedamount = state.map(product => {
                 if (product.id === action.id) {
-                    product.amount = action.amount
+                    product.qty = action.qty
                 }
                 return product
             })

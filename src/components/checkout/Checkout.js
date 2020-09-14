@@ -32,7 +32,13 @@ const Checkout = () => {
                             
                           
                             {basketItems && basketItems.map(item => {
-                                return <CheckoutProduct item={item}  />
+                                return <CheckoutProduct 
+                                id={item.id}
+                                rating={item.rating}
+                                price={item.price}
+                                qty={item.qty}
+                                title={item.title}
+                                image={item.image}  />
                             })}
                            
                         </div>

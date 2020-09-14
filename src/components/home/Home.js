@@ -18,7 +18,7 @@ const Home = () => {
                         price={29.99}
                         image="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRzc13juqmolsYsCjqq-7pK5acZ_LwXoJa0Iq4dLib7P6g1X24z5AOrnQBwCw&usqp=CAc"
                         rating={3}
-                        amount={1}
+                        qty={1}
                     />
                     <Product
                         id="490383409"
@@ -26,7 +26,7 @@ const Home = () => {
                         price={118.99}
                         image="https://m.media-amazon.com/images/I/61aT8jl8THL._AC_UY327_FMwebp_QL65_.jpg"
                         rating={3}
-                        amount={1}
+                        qty={1}
                     />
                 </div>
                 <div className='home__row'>
@@ -36,7 +36,7 @@ const Home = () => {
                         price={199.99}
                         rating={3}
                         image="https://m.media-amazon.com/images/I/81vT0S30GML._AC_UY327_FMwebp_QL65_.jpg"
-                        amount={1}
+                        qty={1}
                     />
                     <Product
                         id="234459385"
@@ -44,7 +44,7 @@ const Home = () => {
                         price={98.99}
                         rating={5}
                         image="https://m.media-amazon.com/images/I/6182S7MYC2L._AC_UY327_FMwebp_QL65_.jpg"
-                        amount={1}
+                        qty={1}
                     />
                     <Product
                         id="325443454"
@@ -52,7 +52,7 @@ const Home = () => {
                         price={598.99}
                         rating={4}
                         image="https://m.media-amazon.com/images/I/51W2e10l3UL._AC_UY327_FMwebp_QL65_.jpg"
-                        amount={1}
+                        qty={1}
                     />
                 </div>
                 <div className='home__row'>
@@ -62,7 +62,7 @@ const Home = () => {
                         price={5900.99}
                         rating={4}
                         image="https://m.media-amazon.com/images/I/61Hh-0F7AbL._AC_UY327_FMwebp_QL65_.jpg"
-                        amount={1}
+                        qty={1}
                     />
                 
                 </div>

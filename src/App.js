@@ -13,8 +13,9 @@ import SignIn from './components/auth/signIn/SignIn';
 import { AuthContext } from './contexts/AuthContext';
 import { auth } from './config'
 import Payment from './components/payment/Payment';
-import {loadStripe} from '@stripe/stripe-js'
-import {Elements} from '@stripe/react-stripe-js'
+import { loadStripe } from '@stripe/stripe-js'
+import { Elements } from '@stripe/react-stripe-js'
+import Orders from './components/orders/Orders';
 
 
 const promise = loadStripe('pk_test_51HPvTbJqRTn8ArZfFqNnmDfYrwjQQIZV6isUruxEIQ0Aj1HFp3hIr3uezG1hUC4cMz7NRT938scNERFEVIIuCQoj00fgrpwaG3');
@@ -42,22 +43,24 @@ const App = () => {
           <Route path="/signin">
             <SignIn />
           </Route>
+          <Route path="/orders">
+            <BasketContextProvider>
+              <Header />
+              <Orders />
+            </BasketContextProvider>
+          </Route>
           <Route path="/payment">
-          <BasketContextProvider>
-          <Header />
-          <Elements stripe={promise}>
-          
-          <Payment />
-          
-          </Elements>
-          </BasketContextProvider>
+            <BasketContextProvider>
+              <Header />
+              <Elements stripe={promise}>
+                <Payment />
+              </Elements>
+            </BasketContextProvider>
           </Route>
           <Route path="/checkout">
             <BasketContextProvider>
-            
               <Header />
               <Checkout />
-            
             </BasketContextProvider>
           </Route>
           <Route path="/">
